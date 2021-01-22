@@ -42,12 +42,12 @@ app.post("/", (req, res) => {
             }
         });
 
-        // If all goes well log the contact's id
+        // If action is successfully completed, send the success page and log the new subscriber's ID
         res.sendFile(__dirname + "/success.html");
         console.log(`Successfully added contact as an audience member. The contact's id is ${response.id}.`);
     }
 
-    // So the catch statement is executed when there is an error so if anything goes wrong the code in the catch code is executed. In the catch block we're sending back the failure page. This means if anything goes wrong send the faliure page
+    // Catch any potential errors. Send back the failure page as a response if there is an error.
     run().catch(e => {
         res.sendFile(__dirname + "/failure.html");
         // console.log(e.response.error);
@@ -59,6 +59,3 @@ app.post("/failure", (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-// API Key: 828bef19c8658c22a55f9c99f1a2781e-us7
-// List ID: 97f40e660a
