@@ -1,22 +1,31 @@
+// import required modules
 const express = require("express");
-const https = require("https");
 const mailchimp = require("@mailchimp/mailchimp_marketing");
+const dotenv = require("dotenv");
+dotenv.config(); // read environment variables
 
+// Create the application
 const app = express();
+// Set the port variable to use Heroku's given port when necessary, and port 3000 when local
 const PORT = process.env.PORT || 3000;
 
+// Parse the request body
 app.use(express.urlencoded({extended: true}));
+// Serve static files from "public" folder
 app.use(express.static("public"));
 
+// Authenticate
 mailchimp.setConfig({
-    apiKey: "828bef19c8658c22a55f9c99f1a2781e-us7",
-    server: "us7"
+    apiKey: process.env.MC_API_KEY,
+    server: process.env.MC_SERVER
 });
 
+// Routing for GET request at path /
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/signup.html");
 })
 
+// Routing for POST request at path /
 app.post("/", (req, res) => {
     const firstName = req.body.firstname;
     const lastName = req.body.lastname;
@@ -54,8 +63,10 @@ app.post("/", (req, res) => {
     });
 });
 
+// Routing for POST request at path /failure
 app.post("/failure", (req, res) => {
     res.redirect("/");
 });
 
+// Listen at port where server is running
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
